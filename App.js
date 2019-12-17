@@ -14,7 +14,31 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Search from './components/Search';
 
 class App extends Component {
+  constructor() {
+    super();
+    this.state = {searchString: '', loading: false};
+  }
+
+  getGitHubUser = async () => {
+    this.setState({loading: true});
+    const {searchString} = this.state;
+    try {
+      const userRes = await fetch(
+        `https://api.github.com/users/${searchString}`,
+      );
+      const githubUser = await userRes.json();
+      const repoRes = await fetch(
+        `https://api.github.com/users/${searchString}/repos`,
+      );
+      const githubUserRepos = await repoRes.json();
+      this.setState({githubUser, githubUserRepos});
+    } catch (e) {
+      this.setState({loading: false});
+      console.log(e);
+    }
+  };
   render() {
+    const {searchString} = this.state;
     return (
       <>
         <StatusBar backgroundColor="blue" />
@@ -23,7 +47,11 @@ class App extends Component {
             contentInsetAdjustmentBehavior="automatic"
             style={styles.scrollView}>
             <Header title="Github User" />
-            <Search />
+            <Search
+              setSearchValue={searchString => this.setState({searchString})}
+              searchString={searchString}
+              searchUser={this.getGitHubUser}
+            />
           </ScrollView>
         </SafeAreaView>
       </>

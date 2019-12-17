@@ -10,12 +10,12 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default class Search extends Component {
-  constructor() {
-    super();
-    this.state = {searchString: ''};
-  }
   render() {
-    const {searchString = ''} = this.state;
+    const {
+      searchString = '',
+      setSearchValue = () => {},
+      searchUser = () => {},
+    } = this.props;
     return (
       <View style={styles.containerStyle}>
         <View style={styles.searchSection}>
@@ -28,10 +28,9 @@ export default class Search extends Component {
           <TextInput
             style={styles.input}
             placeholder="Enter user name"
-            onChangeText={searchString => {
-              this.setState({searchString});
-            }}
+            onChangeText={setSearchValue}
             underlineColorAndroid="transparent"
+            onSubmitEditing={searchUser}
           />
         </View>
         {!!searchString && (
