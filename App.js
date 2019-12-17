@@ -7,13 +7,8 @@
  */
 
 import React, {Component} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  StatusBar,
-  View,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, ScrollView, StatusBar} from 'react-native';
+import Header from './components/Header';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
@@ -25,7 +20,9 @@ class App extends Component {
         <SafeAreaView>
           <ScrollView
             contentInsetAdjustmentBehavior="automatic"
-            style={styles.scrollView}></ScrollView>
+            style={styles.scrollView}>
+            <Header title="Github User" />
+          </ScrollView>
         </SafeAreaView>
       </>
     );
