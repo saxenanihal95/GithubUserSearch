@@ -49,7 +49,7 @@ export default class GithubUser extends Component {
         </View>
         <FlatList
           data={repos}
-          keyExtractor={item => item.id}
+          keyExtractor={item => String(item.id)}
           renderItem={({item}) => <GithubRepo {...item} />}
           ItemSeparatorComponent={this.renderSeparator}
           ListEmptyComponent={<Text>{`${name || 'user'} has no repos.`}</Text>}
