@@ -15,6 +15,7 @@ export default class Search extends Component {
       searchString = '',
       setSearchValue = () => {},
       searchUser = () => {},
+      onCancel = () => {},
     } = this.props;
     return (
       <View style={styles.containerStyle}>
@@ -27,6 +28,7 @@ export default class Search extends Component {
           />
           <TextInput
             style={styles.input}
+            value={searchString}
             placeholder="Enter user name"
             onChangeText={setSearchValue}
             underlineColorAndroid="transparent"
@@ -34,7 +36,7 @@ export default class Search extends Component {
           />
         </View>
         {!!searchString && (
-          <TouchableOpacity style={styles.cancelButton}>
+          <TouchableOpacity style={styles.cancelButton} onPress={onCancel}>
             <Text style={styles.cancelButtonText}>Cancel</Text>
           </TouchableOpacity>
         )}

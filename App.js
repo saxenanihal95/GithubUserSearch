@@ -33,6 +33,15 @@ class App extends Component {
     };
   }
 
+  initState = () =>
+    this.setState({
+      searchString: '',
+      loading: false,
+      userNotFound: false,
+      githubUser: {},
+      githubUserRepos: {},
+    });
+
   getGitHubUser = async () => {
     this.setState({loading: true, userNotFound: false, githubUser: {}});
     const {searchString} = this.state;
@@ -51,7 +60,7 @@ class App extends Component {
         this.setState({githubUser, githubUserRepos, loading: false});
       }
     } catch (e) {
-      this.setState({loading: false});
+      this.initState();
       console.log(e);
     }
   };
@@ -86,6 +95,7 @@ class App extends Component {
             setSearchValue={searchString => this.setState({searchString})}
             searchString={searchString}
             searchUser={this.getGitHubUser}
+            onCancel={this.initState}
           />
           <View style={styles.githubUserViewContainer}>{render}</View>
         </SafeAreaView>
