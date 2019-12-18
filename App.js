@@ -34,7 +34,7 @@ class App extends Component {
   }
 
   getGitHubUser = async () => {
-    this.setState({loading: true});
+    this.setState({loading: true, userNotFound: false, githubUser: {}});
     const {searchString} = this.state;
     try {
       const userRes = await fetch(
