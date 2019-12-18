@@ -28,7 +28,6 @@ export default class GithubUser extends Component {
   render() {
     const {user: {avatar_url = '', name = ''} = {}, repos} = this.props;
     const {width} = Dimensions.get('window');
-    // console.log(this.props.user, repos);
     return (
       <ScrollView>
         <View style={{alignItems: 'center', marginVertical: 10}}>
@@ -53,7 +52,7 @@ export default class GithubUser extends Component {
           keyExtractor={item => item.id}
           renderItem={({item}) => <GithubRepo {...item} />}
           ItemSeparatorComponent={this.renderSeparator}
-          ListEmptyComponent={<Text>{`${name} has no repos.`}</Text>}
+          ListEmptyComponent={<Text>{`${name || 'user'} has no repos.`}</Text>}
         />
       </ScrollView>
     );
