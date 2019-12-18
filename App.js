@@ -100,7 +100,6 @@ const styles = StyleSheet.create({
   },
   githubUserViewContainer: {
     flex: 1,
-    alignItems: 'center',
   },
 });
 
