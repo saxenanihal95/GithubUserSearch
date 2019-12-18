@@ -17,7 +17,6 @@ import {
 } from 'react-native';
 import Header from './components/Header';
 
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Search from './components/Search';
 import GithubUser from './components/GithubUser';
 
@@ -45,6 +44,9 @@ class App extends Component {
   getGitHubUser = async () => {
     this.setState({loading: true, userNotFound: false, githubUser: {}});
     const {searchString} = this.state;
+    if (!searchString) {
+      return this.initState();
+    }
     try {
       const userRes = await fetch(
         `https://api.github.com/users/${searchString}`,
@@ -76,10 +78,18 @@ class App extends Component {
     let render = null;
 
     if (loading) {
-      render = <ActivityIndicator />;
+      render = (
+        <View style={styles.fullHeightConainer}>
+          <ActivityIndicator />
+        </View>
+      );
     }
     if (userNotFound) {
-      render = <Text>User Not Founnd</Text>;
+      render = (
+        <View style={styles.fullHeightConainer}>
+          <Text>User Not Founnd</Text>
+        </View>
+      );
     }
 
     if (Object.keys(githubUser).length) {
@@ -110,6 +120,11 @@ const styles = StyleSheet.create({
   },
   githubUserViewContainer: {
     flex: 1,
+  },
+  fullHeightConainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
