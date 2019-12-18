@@ -8,7 +8,6 @@ export default class Header extends Component {
     return (
       <View
         style={{
-          flex: 1,
           height: 50,
           backgroundColor: 'blue',
           justifyContent: 'center',

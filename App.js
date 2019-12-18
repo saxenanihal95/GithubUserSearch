@@ -7,16 +7,30 @@
  */
 
 import React, {Component} from 'react';
-import {SafeAreaView, StyleSheet, ScrollView, StatusBar} from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  StatusBar,
+  View,
+  Text,
+  ActivityIndicator,
+} from 'react-native';
 import Header from './components/Header';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Search from './components/Search';
+import GithubUser from './components/GithubUser';
 
 class App extends Component {
   constructor() {
     super();
-    this.state = {searchString: '', loading: false};
+    this.state = {
+      searchString: '',
+      loading: false,
+      userNotFound: false,
+      githubUser: {},
+      githubUserRepos: {},
+    };
   }
 
   getGitHubUser = async () => {
@@ -31,28 +45,49 @@ class App extends Component {
         `https://api.github.com/users/${searchString}/repos`,
       );
       const githubUserRepos = await repoRes.json();
-      this.setState({githubUser, githubUserRepos});
+      if (githubUser.message === 'Not Found') {
+        this.setState({userNotFound: true});
+      } else {
+        this.setState({githubUser, githubUserRepos, loading: false});
+      }
     } catch (e) {
       this.setState({loading: false});
       console.log(e);
     }
   };
+
   render() {
-    const {searchString} = this.state;
+    const {
+      searchString,
+      loading,
+      userNotFound,
+      githubUser,
+      githubUserRepos,
+    } = this.state;
+    let render = null;
+
+    if (loading) {
+      render = <ActivityIndicator />;
+    }
+    if (userNotFound) {
+      render = <Text>User Not Founnd</Text>;
+    }
+
+    if (Object.keys(githubUser).length) {
+      render = <GithubUser user={githubUser} repos={githubUserRepos} />;
+    }
+
     return (
       <>
         <StatusBar backgroundColor="blue" />
-        <SafeAreaView>
-          <ScrollView
-            contentInsetAdjustmentBehavior="automatic"
-            style={styles.scrollView}>
-            <Header title="Github User" />
-            <Search
-              setSearchValue={searchString => this.setState({searchString})}
-              searchString={searchString}
-              searchUser={this.getGitHubUser}
-            />
-          </ScrollView>
+        <SafeAreaView style={styles.safeAreaView}>
+          <Header title="Github User" />
+          <Search
+            setSearchValue={searchString => this.setState({searchString})}
+            searchString={searchString}
+            searchUser={this.getGitHubUser}
+          />
+          <View style={styles.githubUserViewContainer}>{render}</View>
         </SafeAreaView>
       </>
     );
@@ -60,27 +95,12 @@ class App extends Component {
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  searchSection: {
+  safeAreaView: {
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
+  },
+  githubUserViewContainer: {
+    flex: 1,
     alignItems: 'center',
-    backgroundColor: '#fff',
-  },
-  searchIcon: {
-    padding: 10,
-  },
-  input: {
-    flex: 1,
-    paddingTop: 10,
-    paddingRight: 10,
-    paddingBottom: 10,
-    paddingLeft: 0,
-    backgroundColor: '#fff',
-    color: '#424242',
   },
 });
 
